@@ -1,7 +1,7 @@
 import os
 
 # board options
-BOARD = 'at32f435cmu7'
+BOARD = 'stm32f407vgt6'
 
 # toolchains options
 ARCH='arm'
@@ -51,7 +51,6 @@ if PLATFORM == 'gcc':
     DEVICE = ' -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections'
     CFLAGS = DEVICE + ' -Dgcc'
     AFLAGS = ' -c' + DEVICE + ' -x assembler-with-cpp -Wa,-mimplicit-it=thumb '
-    # LFLAGS = DEVICE + ' -Wl,--gc-sections,-Map=rt-thread.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.lds'
     LFLAGS = DEVICE +  ' -Wl,--gc-sections,--print-memory-usage,-Map=build/mx3g_' + BOARD + '.map,-cref,-u,Reset_Handler -T board/linker_scripts/link.lds'
     CPATH = ''
     LPATH = ''
@@ -62,9 +61,8 @@ if PLATFORM == 'gcc':
     else:
         CFLAGS += ' -O2'
 
-    CXXFLAGS = CFLAGS
+    CXXFLAGS = CFLAGS 
 
-    # POST_ACTION = OBJCPY + ' -O binary $TARGET rtthread.bin\n' + SIZE + ' $TARGET \n'
     POST_ACTION = OBJCPY + ' -O binary $TARGET build/mx3g_' + BOARD + '.bin\n' + SIZE + ' $TARGET \n'
 
 elif PLATFORM == 'armcc':
@@ -79,7 +77,7 @@ elif PLATFORM == 'armcc':
     DEVICE = ' --cpu Cortex-M4.fp '
     CFLAGS = '-c ' + DEVICE + ' --apcs=interwork --c99'
     AFLAGS = DEVICE + ' --apcs=interwork '
-    LFLAGS = DEVICE + ' --scatter "board\linker_scripts\link.sct" --info sizes --info totals --info unused --info veneers --list rt-thread.map --strict'
+    LFLAGS = DEVICE + ' --scatter "board\linker_scripts\link.sct" --info sizes --info totals --info unused --info veneers --list rtthread.map --strict'
     CFLAGS += ' -I' + EXEC_PATH + '/ARM/ARMCC/include'
     LFLAGS += ' --libpath=' + EXEC_PATH + '/ARM/ARMCC/lib'
 
@@ -94,6 +92,40 @@ elif PLATFORM == 'armcc':
     else:
         CFLAGS += ' -O2'
 
+    CXXFLAGS = CFLAGS 
+    CFLAGS += ' -std=c99'
+
+    POST_ACTION = 'fromelf --bin $TARGET --output rtthread.bin \nfromelf -z $TARGET'
+
+elif PLATFORM == 'armclang':
+    # toolchains
+    CC = 'armclang'
+    CXX = 'armclang'
+    AS = 'armasm'
+    AR = 'armar'
+    LINK = 'armlink'
+    TARGET_EXT = 'axf'
+
+    DEVICE = ' --cpu Cortex-M4.fp '
+    CFLAGS = ' --target=arm-arm-none-eabi -mcpu=cortex-m4 '
+    CFLAGS += ' -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 '
+    CFLAGS += ' -mfloat-abi=hard -c -fno-rtti -funsigned-char -fshort-enums -fshort-wchar '
+    CFLAGS += ' -gdwarf-3 -ffunction-sections '
+    AFLAGS = DEVICE + ' --apcs=interwork '
+    LFLAGS = DEVICE + ' --info sizes --info totals --info unused --info veneers '
+    LFLAGS += ' --list rt-thread.map '
+    LFLAGS += r' --strict --scatter "board\linker_scripts\link.sct" '
+    CFLAGS += ' -I' + EXEC_PATH + '/ARM/ARMCLANG/include'
+    LFLAGS += ' --libpath=' + EXEC_PATH + '/ARM/ARMCLANG/lib'
+
+    EXEC_PATH += '/ARM/ARMCLANG/bin/'
+
+    if BUILD == 'debug':
+        CFLAGS += ' -g -O1' # armclang recommend
+        AFLAGS += ' -g'
+    else:
+        CFLAGS += ' -O2'
+        
     CXXFLAGS = CFLAGS
     CFLAGS += ' -std=c99'
 
@@ -144,7 +176,7 @@ elif PLATFORM == 'iccarm':
     LFLAGS += ' --entry __iar_program_start'
 
     CXXFLAGS = CFLAGS
-
+    
     EXEC_PATH = EXEC_PATH + '/arm/bin/'
     POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
 

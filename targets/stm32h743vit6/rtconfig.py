@@ -7,6 +7,7 @@ BOARD = 'stm32h743vit6'
 ARCH='arm'
 CPU='cortex-m7'
 CROSS_TOOL='gcc'
+EXEC_PATH   = r'/opt/gcc-arm-none-eabi-10.3-2021.10/bin'
 
 # bsp lib config
 BSP_LIBRARY_TYPE = None
@@ -20,7 +21,8 @@ if os.getenv('RTT_ROOT'):
 # EXEC_PATH is the compiler execute path, for example, CodeSourcery, Keil MDK, IAR
 if  CROSS_TOOL == 'gcc':
     PLATFORM    = 'gcc'
-    EXEC_PATH   = r'/opt/gcc-arm-none-eabi-10.3-2021.10/bin'
+    if os.getenv('EXEC_PATH'):
+        EXEC_PATH = os.getenv('EXEC_PATH')
 elif CROSS_TOOL == 'keil':
     PLATFORM    = 'armcc'
     EXEC_PATH   = r'C:/Keil_v5'
