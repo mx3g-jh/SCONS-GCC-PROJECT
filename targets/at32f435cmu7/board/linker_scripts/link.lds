@@ -6,7 +6,7 @@
 MEMORY
 {
     ROM (rx) : ORIGIN = 0x08000000, LENGTH = 4032k /* 4032KB flash */
-    RAM (rw) : ORIGIN = 0x20000000, LENGTH =  384k /* 384K sram */
+    RAM (rw) : ORIGIN = 0x20000000, LENGTH =  512k /* 512K sram */
 }
 ENTRY(Reset_Handler)
 _system_stack_size = 0x200;
