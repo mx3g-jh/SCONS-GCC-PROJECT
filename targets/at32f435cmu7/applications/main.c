@@ -28,5 +28,7 @@ int main(void)
         rt_thread_mdelay(speed);
         rt_pin_write(LED_PIN, PIN_HIGH);
         rt_thread_mdelay(speed);
+        rt_pin_write(LED_PIN, PIN_HIGH);
+        rt_thread_mdelay(speed);
     }
 }

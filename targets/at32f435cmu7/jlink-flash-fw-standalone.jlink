@@ -1,0 +1,4 @@
+h
+loadfile ./build/mx3g_at32f435cmu7.bin, 0x08000000
+r
+q

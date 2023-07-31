@@ -1,0 +1,4 @@
+h
+loadfile ./build/mx3g_stm32h743vit6.bin, 0x08000000
+r
+q
