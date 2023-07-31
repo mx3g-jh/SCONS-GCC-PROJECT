@@ -1,6 +1,6 @@
 menu "Hardware Drivers Config"
 
-config SOC_STM32H743ZI
+config SOC_STM32H743VI
     bool
     select SOC_SERIES_STM32H7
     select RT_USING_COMPONENTS_INIT
@@ -29,7 +29,7 @@ menu "On-chip Peripheral Drivers"
 
         endif
 
-    source "../libraries/HAL_Drivers/Kconfig"
+    source "$RTT_DIR/bsp/stm32/libraries/HAL_Drivers/Kconfig"
 
 endmenu
 

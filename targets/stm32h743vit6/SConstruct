@@ -5,7 +5,7 @@ import rtconfig
 if os.getenv('RTT_ROOT'):
     RTT_ROOT = os.getenv('RTT_ROOT')
 else:
-    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../..')
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/../../os/rt-thread')
 
 sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
 try:
@@ -15,7 +15,7 @@ except:
     print(RTT_ROOT)
     exit(-1)
 
-TARGET = 'rt-thread.' + rtconfig.TARGET_EXT
+TARGET = 'build/mx3g_' + rtconfig.BOARD + '.' + rtconfig.TARGET_EXT
 
 DefaultEnvironment(tools=[])
 env = Environment(tools = ['mingw'],
@@ -36,10 +36,10 @@ Export('rtconfig')
 
 SDK_ROOT = os.path.abspath('./')
 
-if os.path.exists(SDK_ROOT + '/libraries'):
-    libraries_path_prefix = SDK_ROOT + '/libraries'
+if os.path.exists(RTT_ROOT + '/bsp/stm32/libraries'):
+    libraries_path_prefix = RTT_ROOT + '/bsp/stm32/libraries'
 else:
-    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/libraries'
+    libraries_path_prefix = os.path.dirname(RTT_ROOT) + '/bsp/stm32/libraries'
 
 SDK_LIB = libraries_path_prefix
 Export('SDK_LIB')
