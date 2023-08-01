@@ -26,7 +26,6 @@ build
 *.uvoptx*
 *.uvguix*
 *.orig
-*.config
 *.config.old
 cconfig.h
 .cortex-debug*

@@ -58,3 +58,10 @@ objs.extend(SConscript(os.path.join(libraries_path_prefix, 'HAL_Drivers', 'SCons
 
 # make a building
 DoBuilding(TARGET, objs)
+
+from build_flash import jlink_flash, openocd_flash
+arg1 = sys.argv[1]
+if arg1 == "jflash":
+    jlink_flash()
+if arg1 == "stflash":
+    openocd_flash()
