@@ -82,7 +82,7 @@ void *thread_subscriber(void *unused)
 
 int main(void)
 {
-//   LOGGER_INFO("uORB version: %s", orb_version());
+	LOGGER_INFO("uORB version: %s", orb_version());
 
 	// One publishing thread, three subscription threads
 	pthread_t pthread_id;
