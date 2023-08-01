@@ -18,17 +18,16 @@
 
 int main(void)
 {
-    rt_uint32_t speed = 50;
-    /* set led pin mode to output */
-    rt_pin_mode(LED_PIN, PIN_MODE_OUTPUT);
+	rt_uint32_t speed = 50;
+	/* set led pin mode to output */
+	rt_pin_mode(LED_PIN, PIN_MODE_OUTPUT);
 
-    while (1)
-    {
-        rt_pin_write(LED_PIN, PIN_LOW);
-        rt_thread_mdelay(speed);
-        rt_pin_write(LED_PIN, PIN_HIGH);
-        rt_thread_mdelay(speed);
-        rt_pin_write(LED_PIN, PIN_HIGH);
-        rt_thread_mdelay(speed);
-    }
+	while (1) {
+		rt_pin_write(LED_PIN, PIN_LOW);
+		rt_thread_mdelay(speed);
+		rt_pin_write(LED_PIN, PIN_HIGH);
+		rt_thread_mdelay(speed);
+		rt_pin_write(LED_PIN, PIN_HIGH);
+		rt_thread_mdelay(speed);
+	}
 }

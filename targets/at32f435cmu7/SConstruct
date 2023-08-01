@@ -61,3 +61,12 @@ objs.extend(SConscript(os.path.join(libraries_path_prefix, 'rt_drivers', 'SConsc
 
 # make a building
 DoBuilding(TARGET, objs)
+
+from build_flash import jlink_flash, astyle_check, astyle_format
+arg1 = sys.argv[1]
+if arg1 == "jflash":
+    jlink_flash()
+if arg1 == "format":
+    astyle_format()
+if arg1 == "check":
+    astyle_check()

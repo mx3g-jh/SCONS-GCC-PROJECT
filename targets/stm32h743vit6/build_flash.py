@@ -47,5 +47,20 @@ def main():
         subprocess.run(['scons', '-j12'], check=True)
         jlink_flash()
 
-if __name__ == "__main__":
-    main()
+astyle_cmd = [
+    'bash', '../../tools/astyle/check_code_style_all.sh',
+    '--fix'
+]
+def astyle_format():
+        result = subprocess.run(astyle_cmd, check=True)
+        return result
+
+
+astyle_check_cmd = [
+    'bash', '../../tools/astyle/check_code_style_all.sh',
+    'git diff', '--check'
+]
+
+def astyle_check():
+        result = subprocess.run(astyle_check_cmd, check=True)
+        return result

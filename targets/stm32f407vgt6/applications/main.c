@@ -17,16 +17,15 @@
 
 int main(void)
 {
-    /* set LED0 pin mode to output */
-    rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
+	/* set LED0 pin mode to output */
+	rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
 
-    while (1)
-    {
-        rt_thread_mdelay(50);
-        rt_pin_write(LED1_PIN, PIN_HIGH);
-        rt_thread_mdelay(50);
-        rt_pin_write(LED1_PIN, PIN_LOW);
-    }
+	while (1) {
+		rt_thread_mdelay(50);
+		rt_pin_write(LED1_PIN, PIN_HIGH);
+		rt_thread_mdelay(50);
+		rt_pin_write(LED1_PIN, PIN_LOW);
+	}
 
-    return RT_EOK;
+	return RT_EOK;
 }
