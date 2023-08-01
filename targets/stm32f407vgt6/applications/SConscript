@@ -2,7 +2,7 @@ from building import *
 import os
 
 cwd = GetCurrentDir()
-src = Glob('*.c')
+src = Glob('*.cpp') + Glob('*.c')
 CPPPATH = [cwd]
 
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
