@@ -16,71 +16,81 @@
 #include <unistd.h>
 #include <string.h>
 
-#define PTS_PASS        0
-#define PTS_FAIL        1
-#define PTS_UNRESOLVED  2
-#define PTS_UNSUPPORTED 4
-#define PTS_UNTESTED    5
-
-#ifndef ARRAY_SIZE
-#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof(arr[0]))
-#endif
-
-#define PTS_ATTRIBUTE_NORETURN      __attribute__((noreturn))
-#define PTS_ATTRIBUTE_UNUSED        __attribute__((unused))
-#define PTS_ATTRIBUTE_UNUSED_RESULT __attribute__((warn_unused_result))
+#include "slog.h"
+#include "uorb/publication.h"
+#include "uorb/publication_multi.h"
+#include "uorb/subscription.h"
+#include "uorb/subscription_interval.h"
+#include "example_string.h"
 
 /* defined the LED0 pin: PD14 */
 #define LED1_PIN    GET_PIN(E, 3)
 
-static void *a_thread_func(void *parameter)
+void *thread_publisher(void *arg)
 {
-	sleep(10);
+	uorb::PublicationData<uorb::msg::example_string> pub_example_string;
 
-	/* Shouldn't reach here.  If we do, then the pthread_cancel()
-	 * function did not succeed. */
-	fprintf(stderr, "Could not send cancel request correctly\n");
+	for (int i = 0; i < 1000; i++) {
+		snprintf((char *)pub_example_string.get().string,
+			 example_string_s::STRING_LENGTH, "%d: %s", i,
+			 "pub test.");
 
-	return NULL;
-}
+		if (!pub_example_string.Publish()) {
+			LOGGER_ERROR("Publish error");
+		}
 
-static int posix_testcase(void)
-{
-	pthread_t new_th;
-	int ret;
-
-	ret = pthread_create(&new_th, NULL, a_thread_func, NULL);
-
-	if (ret) {
-		fprintf(stderr, "pthread_create(): %s\n", strerror(ret));
-		return PTS_UNRESOLVED;
+		usleep(1 * 1000 * 1000);
 	}
 
-	/* Try to cancel the newly created thread.  If an error is returned,
-	 * then the thread wasn't created successfully. */
-	// ret = pthread_cancel(new_th);
-	// if (ret) {
-	//     printf("Test FAILED: A new thread wasn't created: %s\n",
-	//            strerror(ret));
-	//     return PTS_FAIL;
-	// }
+	LOGGER_WARN("Publication over.");
 
-	printf("Test PASSED\n");
-	return PTS_PASS;
+	return nullptr;
+}
+
+void *thread_subscriber(void *unused)
+{
+	uorb::SubscriptionData<uorb::msg::example_string> sub_example_string;
+
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
+#endif
+
+	int timeout_ms = 2000;
+
+	struct orb_pollfd pollfds[] = {
+		{.fd = sub_example_string.handle(), .events = POLLIN}
+	};
+
+	while (true) {
+		if (0 < orb_poll(pollfds, ARRAY_SIZE(pollfds), timeout_ms)) {
+			if (sub_example_string.Update()) {
+				LOGGER_INFO("Receive msg: \"%s\"", sub_example_string.get().string);
+			}
+
+			usleep(1 * 1000 * 1000);
+		}
+
+		//  else {
+		//   LOGGER_WARN("Got no data within %d milliseconds", 2000);
+		//   break;
+		// }
+	}
+
+	LOGGER_WARN("subscription over");
+	return nullptr;
 }
 
 int main(void)
 {
-	/* set LED0 pin mode to output */
-	rt_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
-	posix_testcase();
+//   LOGGER_INFO("uORB version: %s", orb_version());
 
-	while (1) {
-		rt_thread_mdelay(50);
-		// rt_pin_write(LED1_PIN, PIN_HIGH);
-		// rt_thread_mdelay(50);
-		// rt_pin_write(LED1_PIN, PIN_LOW);
-	}
+	// One publishing thread, three subscription threads
+	pthread_t pthread_id;
+	pthread_create(&pthread_id, nullptr, thread_publisher, nullptr);
+	pthread_create(&pthread_id, nullptr, thread_subscriber, nullptr);
+
+	// Wait for all threads to finish
+//   pthread_exit(nullptr);
 
 	return RT_EOK;
 }

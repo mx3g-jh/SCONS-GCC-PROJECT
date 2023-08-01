@@ -11,4 +11,15 @@ for d in list:
     if os.path.isfile(os.path.join(path, 'SConscript')):
         objs = objs + SConscript(os.path.join(d, 'SConscript'))
 
+# 添加其他文件夹下的SConscript
+lib_directory = '/../../lib'
+
+if os.path.isdir(lib_directory):
+    list_lib = os.listdir(lib_directory)
+
+    for d in list_lib:
+        path = os.path.join(list_lib, d)
+        if os.path.isfile(os.path.join(path, 'SConscript')):
+            objs = objs + SConscript(os.path.join(d, 'SConscript'))
+
 Return('objs')
