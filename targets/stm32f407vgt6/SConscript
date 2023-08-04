@@ -13,12 +13,12 @@ for d in list:
         objs = objs + SConscript(os.path.join(d, 'SConscript'))
 
 ############
-# lib uorb
+# lib
 ############
-lib_path = os.path.join(cwd, os.pardir, os.pardir, 'lib', 'uorb')
+lib_path = os.path.join(cwd, os.pardir, os.pardir, 'lib')
 
-uorb_sconscript = os.path.join(lib_path, 'SConscript')
-objs = objs + SConscript(uorb_sconscript)
+lib_sconscript = os.path.join(lib_path, 'SConscript')
+objs = objs + SConscript(lib_sconscript)
 ############
 
 Return('objs')

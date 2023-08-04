@@ -23,6 +23,7 @@
 #include "uorb/subscription_interval.h"
 #include "example_string.h"
 
+#include <mathlib.h>
 /* defined the LED0 pin: PD14 */
 #define LED1_PIN    GET_PIN(E, 3)
 
@@ -34,6 +35,8 @@ void *thread_publisher(void *arg)
 		snprintf((char *)pub_example_string.get().string,
 			 example_string_s::STRING_LENGTH, "%d: %s", i,
 			 "pub test.");
+
+		snprintf((char *)pub_example_string.get().string, example_string_s::STRING_LENGTH, "%d: %s", i, "pub test.");
 
 		if (!pub_example_string.Publish()) {
 			LOGGER_ERROR("Publish error");
