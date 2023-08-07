@@ -67,7 +67,7 @@ void *thread_subscriber(void *unused)
 	while (true) {
 		if (0 < orb_poll(pollfds, ARRAY_SIZE(pollfds), timeout_ms)) {
 			if (sub_example_string.Update()) {
-				LOGGER_INFO("Receive msg: \"%s\"", sub_example_string.get().string);
+				// LOGGER_INFO("Receive msg: \"%s\"", sub_example_string.get().string);
 			}
 
 			usleep(1 * 1000 * 1000);

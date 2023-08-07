@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "drv_usart.h": "c"
+    },
+    "cmake.sourceDirectory": "/home/mx3g/scons-gcc-project/os/rt-thread/bsp/raspberry-pico/libraries/pico-sdk/src/common/pico_base"
+}
