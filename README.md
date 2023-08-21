@@ -3,7 +3,7 @@
 Development Project Based on SCONS-GCC
 
 ## Usage
-`git clone git@github.com:mx3g-jh/SCONS-GCC-PROJECT.git SCONS-GCC-PROJECT`
+`git clone git@github.com:mx3g-jh/SCONS-GCC-PROJECT.git SCONS-GCC-PROJECT\n\t`
 
 `export EXEC_PATH=/opt/gcc-arm-none-eabi-10.3-2021.10/bin`
 
